@@ -46,7 +46,8 @@ get("/payment/new") do
 end
 
 get("/payment/results") do
-   user_apr = params.fetch("users_apr").to_f
+   user_apr = params.fetch("users_apr")
+   user_apr = user_apr.to_f
    user_principle = params.fetch("users_principle").to_f
    user_period = params.fetch("users_number_of_years").to_i
    user_months = user_period * 12
@@ -58,16 +59,9 @@ get("/payment/results") do
    bottom_exp = bottom_parenth**exp_n
    final_bottom = 1 - bottom_exp
    users_payment = equation_top / final_bottom
-   @apr = user_apr.to_fs(:percentage)
+   @apr = user_apr.to_fs(:percentage, precision: 4)
    @payment = users_payment.to_fs(:currency)
    @principal = user_principle.to_fs(:currency)
    @years = user_period
-   pp user_months
-   pp user_apr_monthly
-   pp equation_top
-   pp bottom_parenth
-   pp exp_n
-   pp final_bottom
-   pp users_payment
   erb(:payment_results)
 end
